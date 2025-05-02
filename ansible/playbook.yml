@@ -22,6 +22,18 @@
         name: /tmp/elasticsearch.rpm
         state: present
 
+    - name: Set JVM heap size
+      lineinfile:
+        path: /etc/elasticsearch/jvm.options
+        regexp: '^-Xms'
+        line: '-Xms512m'
+
+    - name: Set JVM heap size max
+      lineinfile:
+        path: /etc/elasticsearch/jvm.options
+        regexp: '^-Xmx'
+        line: '-Xmx512m'
+
     - name: Enable and start Elasticsearch
       systemd:
         name: elasticsearch
