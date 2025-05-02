@@ -1,0 +1,29 @@
+- name: Install Elasticsearch
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Java
+      yum:
+        name: java
+        state: present
+
+    - name: Add Elasticsearch repo
+      get_url:
+        url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.17-x86_64.rpm
+        dest: /tmp/elasticsearch.rpm
+
+    - name: Import Elasticsearch GPG key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+    - name: Install Elasticsearch
+      yum:
+        name: /tmp/elasticsearch.rpm
+        state: present
+
+    - name: Enable and start Elasticsearch
+      systemd:
+        name: elasticsearch
+        enabled: yes
+        state: started
